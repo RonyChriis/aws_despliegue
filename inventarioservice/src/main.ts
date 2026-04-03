@@ -1,0 +1,12 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.enableCors();
+  await app.listen(process.env.PORT ?? 3002);
+  console.log('inventarioservice corriendo en puerto 3002');
+}
+bootstrap();

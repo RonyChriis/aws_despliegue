@@ -1,0 +1,10 @@
+import { IsNumber, Min } from 'class-validator';
+
+export class UpdateStockDto {
+  @IsNumber()
+  @Min(0)
+  stock: number;
+
+  @IsNumber()
+  trabajadorId: number;
+}
