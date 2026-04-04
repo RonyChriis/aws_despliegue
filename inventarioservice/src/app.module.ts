@@ -22,7 +22,7 @@ import { Movimiento } from './movimientos/entities/movimiento.entity';
         password: config.get('DB_PASS')!,
         database: config.get('DB_NAME')!,
         entities: [Producto, Movimiento],
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     ProductosModule,
