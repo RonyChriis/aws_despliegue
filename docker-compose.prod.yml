@@ -1,0 +1,105 @@
+
+services:
+
+  db-usuarios:
+    image: postgres:15-alpine
+    container_name: db-usuarios
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: usuarios_db
+    volumes:
+      - pgdata-usuarios:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-inventario:
+    image: postgres:15-alpine
+    container_name: db-inventario
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: inventario_db
+    volumes:
+      - pgdata-inventario:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  usuarioservice:
+    image: ronydb/usuarioservice:latest
+    container_name: usuarioservice
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DB_HOST: db-usuarios
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: ${DB_PASS}
+      DB_NAME: usuarios_db
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      db-usuarios:
+        condition: service_healthy
+    restart: always
+
+  inventarioservice:
+    image: ronydb/inventarioservice:latest
+    container_name: inventarioservice
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      DB_HOST: db-inventario
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: ${DB_PASS}
+      DB_NAME: inventario_db
+      USUARIO_SERVICE_URL: http://usuarioservice:3001
+    depends_on:
+      db-inventario:
+        condition: service_healthy
+      usuarioservice:
+        condition: service_started
+    restart: always
+
+  reporteservice:
+    image: ronydb/reporteservice:latest
+    container_name: reporteservice
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      INVENTARIO_SERVICE_URL: http://inventarioservice:3002
+      USUARIO_SERVICE_URL: http://usuarioservice:3001
+    depends_on:
+      - inventarioservice
+      - usuarioservice
+    restart: always
+
+  gatewayservice:
+    image: ronydb/gatewayservice:latest
+    container_name: gatewayservice
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      USUARIO_SERVICE_URL: http://usuarioservice:3001
+      INVENTARIO_SERVICE_URL: http://inventarioservice:3002
+      REPORTE_SERVICE_URL: http://reporteservice:3003
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - usuarioservice
+      - inventarioservice
+      - reporteservice
+    restart: always
+
+volumes:
+  pgdata-usuarios:
+  pgdata-inventario:
