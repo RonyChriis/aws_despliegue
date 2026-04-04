@@ -167,7 +167,7 @@ jobs:
             cd /home/ec2-user/app
 
             # Crear archivo .env de producción con los secrets
-            cat > .env.prod << EOF
+            cat > .env << EOF
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             DB_PASS=${{ secrets.DB_PASS }}
             EOF
