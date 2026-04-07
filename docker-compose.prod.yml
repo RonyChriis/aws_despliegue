@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: usuarios_db
+      POSTGRES_DB: dbuser
     volumes:
       - pgdata-usuarios:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +22,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: inventario_db
+      POSTGRES_DB: dbinventario
     volumes:
       - pgdata-inventario:/var/lib/postgresql/data
     healthcheck:
@@ -42,7 +42,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASS: ${DB_PASS}
-      DB_NAME: usuarios_db
+      DB_NAME: dbuser
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
       db-usuarios:
@@ -60,7 +60,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASS: ${DB_PASS}
-      DB_NAME: inventario_db
+      DB_NAME: dbinventario
       USUARIO_SERVICE_URL: http://usuarioservice:3001
     depends_on:
       db-inventario:

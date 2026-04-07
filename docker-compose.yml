@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: usuarios_db
+      POSTGRES_DB: dbuser
     volumes:
       - pgdata-usuarios:/var/lib/postgresql/data
     healthcheck:
@@ -26,7 +26,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: inventario_db
+      POSTGRES_DB: dbinventario
     volumes:
       - pgdata-inventario:/var/lib/postgresql/data
     healthcheck:
@@ -51,7 +51,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASS: postgres
-      DB_NAME: usuarios_db
+      DB_NAME: dbuser
       CHOKIDAR_USEPOLLING: "true"
     command: npm run start:dev
     depends_on:
@@ -74,7 +74,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASS: postgres
-      DB_NAME: inventario_db
+      DB_NAME: dbinventario
       USUARIO_SERVICE_URL: http://usuarioservice:3001
       CHOKIDAR_USEPOLLING: "true"
     command: npm run start:dev

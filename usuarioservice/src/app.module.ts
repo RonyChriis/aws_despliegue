@@ -19,7 +19,7 @@ import { Trabajador } from './trabajadores/entities/trabajador.entity';
         password: config.get('DB_PASS')!,
         database: config.get('DB_NAME')!,
         entities: [Trabajador],
-        synchronize: false,
+        synchronize: true,
       }),
     }),
     TrabajadoresModule,
