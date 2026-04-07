@@ -4,6 +4,8 @@ services:
   db-usuarios:
     image: postgres:15-alpine
     container_name: db-usuarios
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASS}
@@ -19,6 +21,8 @@ services:
   db-inventario:
     image: postgres:15-alpine
     container_name: db-inventario
+    ports:
+      - "5434:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASS}
